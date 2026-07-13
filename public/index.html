@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA_POOL Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="glow-bg glow-bg-2"></div>
+    
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">G</div>
+                <h2>GA_POOL</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-tab="accounts">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Google Accounts
+                </button>
+                <button class="nav-btn" data-tab="flow">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    Flow Generator
+                </button>
+                <button class="nav-btn" data-tab="tts">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    AI Studio TTS
+                </button>
+                <button class="nav-btn" data-tab="traffic">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Traffic Logs
+                </button>
+            </nav>
+            
+            <div class="sidebar-status">
+                <div class="status-item">
+                    <span class="status-dot green"></span>
+                    <span class="status-label">Server Online</span>
+                </div>
+                <div class="status-uptime">Uptime: <span id="uptime-val">00:00:00</span></div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <header class="workspace-header">
+                <h1 id="tab-title">Google Accounts</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-icon" id="btn-refresh-data" title="Sync data">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                        Refresh Data
+                    </button>
+                </div>
+            </header>
+
+            <div class="workspace-content">
+                <!-- ================= ACCOUNTS TAB ================= -->
+                <section class="tab-pane active" id="tab-accounts">
+                    <div class="grid grid-2-1">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Account Pool</h3>
+                                <button class="btn btn-primary btn-sm" id="btn-refresh-all">Refresh All Cookies</button>
+                            </div>
+                            <div class="card-body">
+                                <div id="accounts-list" class="accounts-list">
+                                    <div class="loading">Loading accounts...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex-column gap-20">
+                            <!-- Add Account -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Add Google Account</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-selectors">
+                                        <button class="sub-tab-btn active" data-subtab="subtab-login-browser">Browser Login</button>
+                                        <button class="sub-tab-btn" data-subtab="subtab-paste-cookies">Paste Cookies</button>
+                                    </div>
+
+                                    <div class="sub-tab-content active" id="subtab-login-browser">
+                                        <p class="card-description">Membuka browser Chrome untuk login manual. Setelah berhasil login, cookies akan ditangkap otomatis.</p>
+                                        <button class="btn btn-primary w-100" id="btn-start-login">Open Chrome & Login</button>
+                                        <div id="login-status-box" class="status-box hidden">
+                                            <span class="spinner"></span>
+                                            <span id="login-status-text">Menunggu browser dibuka...</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="sub-tab-content" id="subtab-paste-cookies">
+                                        <p class="card-description">Paste string header Cookie dari session <code>labs.google.com</code>.</p>
+                                        <div class="form-group">
+                                            <textarea id="cookie-input" placeholder="Paste cookie string di sini..." rows="4"></textarea>
+                                        </div>
+                                        <button class="btn btn-primary w-100" id="btn-save-cookies">Add Account via Cookies</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Keep Alive Config -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Keep-Alive Configuration</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-description">Sistem akan mengakses labs.google secara otomatis untuk memperbarui session cookie agar tidak kedaluwarsa.</p>
+                                    <div class="form-group inline-group">
+                                        <div>
+                                            <label for="keepalive-interval">Interval (menit)</label>
+                                            <input type="number" id="keepalive-interval" min="5" max="720" value="30">
+                                        </div>
+                                        <button class="btn btn-secondary align-bottom" id="btn-save-keepalive">Save</button>
+                                    </div>
+                                    <div class="status-item mt-10">
+                                        <span class="status-dot green" id="keepalive-status-dot"></span>
+                                        <span class="status-label" id="keepalive-status-text">Keep-alive Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= FLOW TAB ================= -->
+                <section class="tab-pane" id="tab-flow">
+                    <div class="grid grid-1-1">
+                        <!-- Generate Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Generate Image & Video</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="flow-prompt">Prompt</label>
+                                    <textarea id="flow-prompt" placeholder="Describe the image or video you want to generate..." rows="4"></textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="flow-model">Model</label>
+                                        <select id="flow-model">
+                                            <option value="imagen-3">Imagen 3 (Square)</option>
+                                            <option value="imagen-3-portrait">Imagen 3 (Portrait)</option>
+                                            <option value="veo_3_1_t2v_fast_portrait">VEO 3.1 Text-to-Video</option>
+                                            <option value="veo_3_1_r2v_fast_portrait">VEO 3.1 Image-to-Video</option>
+                                            <option value="GEM_PIX_2">GEM_PIX_2</option>
+                                            <option value="NARWHAL">NARWHAL</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="flow-aspect">Aspect Ratio</label>
+                                        <select id="flow-aspect">
+                                            <option value="1:1">1:1 Square</option>
+                                            <option value="9:16">9:16 Portrait</option>
+                                            <option value="16:9">16:9 Landscape</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group hidden" id="group-image-input">
+                                    <label for="flow-image">Input Image (Base64)</label>
+                                    <input type="file" id="flow-image-file" accept="image/*">
+                                    <textarea id="flow-image-base64" class="hidden"></textarea>
+                                </div>
+
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" id="btn-flow-generate">Generate Image</button>
+                                    <button class="btn btn-secondary" id="btn-flow-generate-video">Generate Video</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gallery / Output -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Generated Gallery</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="gallery" id="flow-gallery">
+                                    <p class="empty-msg">No items generated yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= TTS TAB ================= -->
+                <section class="tab-pane" id="tab-tts">
+                    <div class="grid grid-1-1">
+                        <!-- TTS Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Text-to-Speech Generation</h3>
+                            </div>
+                            <div class="card-body scrollable-card-body">
+                                <div class="form-group">
+                                    <label for="tts-text">Script Text</label>
+                                    <textarea id="tts-text" placeholder="Tulis teks untuk diubah menjadi suara..." rows="4"></textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="tts-voice">Voice</label>
+                                        <select id="tts-voice">
+                                            <!-- Dynamically filled -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="tts-style">Style</label>
+                                        <select id="tts-style">
+                                            <!-- Dynamically filled -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="tts-pace">Pace</label>
+                                        <select id="tts-pace">
+                                            <!-- Dynamically filled -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="tts-accent">Accent</label>
+                                        <select id="tts-accent">
+                                            <!-- Dynamically filled -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <details class="form-details">
+                                    <summary>Director Settings (Scene & Context)</summary>
+                                    <div class="form-group mt-10">
+                                        <label for="tts-scene">Scene Description</label>
+                                        <textarea id="tts-scene" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tts-context">Sample Context / Direction</label>
+                                        <textarea id="tts-context" rows="3"></textarea>
+                                    </div>
+                                </details>
+
+                                <div class="btn-row mt-20">
+                                    <button class="btn btn-primary" id="btn-tts-generate">Generate Speech</button>
+                                    <button class="btn btn-secondary" id="btn-tts-preview">Preview Voice</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Audio list -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Generated Audio</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="audio-list" id="tts-audio-list">
+                                    <p class="empty-msg">No audio generated yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================= TRAFFIC TAB ================= -->
+                <section class="tab-pane" id="tab-traffic">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Real-time Engine Logs</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table" id="traffic-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Method</th>
+                                            <th>Endpoint</th>
+                                            <th>Status</th>
+                                            <th>Latency</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="traffic-body">
+                                        <tr>
+                                            <td colspan="5" class="text-center">No traffic recorded yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Lightbox for Images/Videos -->
+    <div id="media-modal" class="modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <div id="modal-media-container"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

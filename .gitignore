@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment variables (secrets)
+.env
+.env.*
+
+# Local data (contains session cookies & browser profiles)
+data/accounts.json
+data/browser-data/
+
+# Generated outputs
+audio/generations/
+audio/generations/index.json
+audio/generations/preview/
+output/
+
+# IDE config
+.gemini/
+.vscode/
+.idea/
+*.log
