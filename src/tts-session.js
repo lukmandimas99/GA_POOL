@@ -225,7 +225,7 @@ class TtsSession {
     }
 
     this.browser = await puppeteer.launch({
-      headless: this.headless ? true : false,
+      headless: this.headless ? 'shell' : false,
       executablePath: findChrome(),
       userDataDir: this.profileDir,
       defaultViewport: this.headless ? { width: 1600, height: 1200 } : null,

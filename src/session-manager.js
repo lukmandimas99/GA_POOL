@@ -135,7 +135,7 @@ async function extractCookies(accountId, { silent = false } = {}) {
 
         try {
             browser = await puppeteer.launch({
-                headless: true,
+                headless: 'shell',
                 executablePath: config.CHROME_EXECUTABLE_PATH,
                 userDataDir: acc.userDataDir,
                 args: [
@@ -672,7 +672,7 @@ async function checkHealth(accountId) {
     ensureProfileUsable(acc.userDataDir);
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: 'shell',
         executablePath: config.CHROME_EXECUTABLE_PATH,
         userDataDir: acc.userDataDir,
         args: [
@@ -893,45 +893,30 @@ async function detectGoogleOne(accountId) {
 
         const html = storageResult.data;
         let tier = 'Free (15 GB)';
-
-        // 1. Try to match the exact storage limit text e.g. "0 GB dari 5 TB" or "12 GB of 100 GB"
         const storageMatch = html.match(/\d+(?:\.\d+)?\s*(?:GB|TB|MB)\s+(?:dari|of|de|sur|out\s+of|\/)\s+(\d+\s*(?:GB|TB))/i);
         let parsedLimit = null;
         if (storageMatch) {
             parsedLimit = storageMatch[1].replace(/\s+/g, '').toUpperCase();
         }
 
-        if (parsedLimit === '100GB') {
-            tier = 'Basic (100 GB)';
-        } else if (parsedLimit === '200GB') {
-            tier = 'Standard (200 GB)';
-        } else if (parsedLimit === '2TB') {
-            tier = 'Premium / AI Premium (2 TB)';
-        } else if (parsedLimit === '5TB') {
-            tier = 'Premium (5 TB)';
-        } else if (parsedLimit === '10TB') {
-            tier = 'Premium (10 TB)';
-        } else if (parsedLimit === '20TB') {
-            tier = 'Premium (20 TB)';
-        } else if (parsedLimit === '30TB') {
-            tier = 'Premium (30 TB)';
-        } else {
-            // 2. Fallback: Search descending to avoid matching larger tiers on smaller ones
-            if (/30\s*TB/i.test(html)) {
-                tier = 'Premium (30 TB)';
-            } else if (/20\s*TB/i.test(html)) {
-                tier = 'Premium (20 TB)';
-            } else if (/10\s*TB/i.test(html)) {
-                tier = 'Premium (10 TB)';
-            } else if (/5\s*TB/i.test(html)) {
-                tier = 'Premium (5 TB)';
-            } else if (/2\s*TB/i.test(html)) {
-                tier = 'Premium / AI Premium (2 TB)';
-            } else if (/200\s*GB/i.test(html)) {
-                tier = 'Standard (200 GB)';
-            } else if (/100\s*GB/i.test(html)) {
-                tier = 'Basic (100 GB)';
+        if (parsedLimit) {
+            const num = parseInt(parsedLimit, 10);
+            const isTB = parsedLimit.includes('TB');
+            if (isTB) {
+                if (num === 2) tier = 'Premium / AI Premium (2 TB)';
+                else if (num === 5) tier = 'Premium (5 TB)';
+                else if (num === 10) tier = 'Premium (10 TB)';
+                else if (num === 20) tier = 'Premium (20 TB)';
+                else if (num === 30) tier = 'Premium (30 TB)';
+                else tier = `Premium (${num} TB)`;
+            } else {
+                if (num === 100) tier = 'Basic (100 GB)';
+                else if (num === 200) tier = 'Standard (200 GB)';
+                else if (num >= 100) tier = `Premium (${num} GB)`;
+                else tier = 'Free (15 GB)';
             }
+        } else {
+            tier = acc.googleOneTier && acc.googleOneTier !== 'Unknown (Expired)' ? acc.googleOneTier : 'Free (15 GB)';
         }
 
         acc.googleOneTier = tier;

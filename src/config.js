@@ -34,6 +34,7 @@ const cfg = {
 
   // TTS
   TTS_HEADLESS: process.env.TTS_HEADLESS === 'true',
+  HEADLESS: process.env.HEADLESS === 'false' ? false : 'shell',
   TTS_KEEP_SESSION: process.env.TTS_KEEP_SESSION !== 'false',
 
   // Default Headers — MUST match the actual browser used by Puppeteer
