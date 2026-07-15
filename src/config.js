@@ -30,7 +30,21 @@ const cfg = {
   HOST: process.env.HOST || '127.0.0.1',
 
   // Path to real Chrome (not Puppeteer's bundled Chromium)
-  CHROME_EXECUTABLE_PATH: process.env.CHROME_PATH || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  CHROME_EXECUTABLE_PATH: (() => {
+    if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+    const fs = require('fs');
+    const path = require('path');
+    const os = require('os');
+    const paths = [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local'), 'Google', 'Chrome', 'Application', 'chrome.exe')
+    ];
+    for (const p of paths) {
+      if (fs.existsSync(p)) return p;
+    }
+    return paths[0]; // fallback
+  })(),
 
   // TTS
   TTS_HEADLESS: process.env.TTS_HEADLESS === 'true',

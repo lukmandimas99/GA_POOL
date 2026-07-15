@@ -140,15 +140,25 @@ const CHROME_PATHS = {
 function findChrome() {
   const env = process.env.CHROME_PATH;
   if (env && fs.existsSync(env)) return env;
+
+  if (config.CHROME_EXECUTABLE_PATH && fs.existsSync(config.CHROME_EXECUTABLE_PATH)) {
+    return config.CHROME_EXECUTABLE_PATH;
+  }
+
   const def = CHROME_PATHS[process.platform];
   if (def && fs.existsSync(def)) return def;
+
+  const localAppData = process.env.LOCALAPPDATA || (process.env.USERPROFILE ? path.join(process.env.USERPROFILE, 'AppData', 'Local') : null);
   const candidates = [
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    localAppData ? path.join(localAppData, 'Google', 'Chrome', 'Application', 'chrome.exe') : null,
     '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
     '/Applications/Chromium.app/Contents/MacOS/Chromium',
     '/usr/bin/google-chrome-stable',
     '/usr/bin/chromium-browser',
     '/usr/bin/chromium',
-  ];
+  ].filter(Boolean);
+
   for (const p of candidates) if (fs.existsSync(p)) return p;
   throw new Error('Chrome tidak ditemukan. Set env CHROME_PATH.');
 }
