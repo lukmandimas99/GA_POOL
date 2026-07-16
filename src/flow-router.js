@@ -43,7 +43,15 @@ const handleModels = (req, res) => {
             { id: 'NANO_BANANA_2_LITE', object: 'model', created: now, owned_by: 'flow-gateway' },
             { id: 'NANO_BANANA_PRO', object: 'model', created: now, owned_by: 'flow-gateway' },
             { id: 'veo_3_1_t2v_fast_portrait', object: 'model', created: now, owned_by: 'flow-gateway' },
-            { id: 'veo_3_1_r2v_fast_portrait', object: 'model', created: now, owned_by: 'flow-gateway' }
+            { id: 'veo_3_1_r2v_fast_portrait', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_t2v_4s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_t2v_6s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_t2v_8s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_t2v_10s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_i2v_4s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_i2v_6s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_i2v_8s', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'abra_i2v_10s', object: 'model', created: now, owned_by: 'flow-gateway' }
         ]
     });
 };
