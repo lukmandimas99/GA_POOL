@@ -38,8 +38,6 @@ const handleModels = (req, res) => {
     res.json({
         object: 'list',
         data: [
-            { id: 'imagen-3', object: 'model', created: now, owned_by: 'google' },
-            { id: 'imagen-3-portrait', object: 'model', created: now, owned_by: 'google' },
             { id: 'veo-3.1', object: 'model', created: now, owned_by: 'google' },
             { id: 'NANO_BANANA_2', object: 'model', created: now, owned_by: 'flow-gateway' },
             { id: 'NANO_BANANA_2_LITE', object: 'model', created: now, owned_by: 'flow-gateway' },
