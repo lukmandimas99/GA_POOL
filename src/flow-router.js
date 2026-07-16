@@ -41,9 +41,9 @@ const handleModels = (req, res) => {
             { id: 'imagen-3', object: 'model', created: now, owned_by: 'google' },
             { id: 'imagen-3-portrait', object: 'model', created: now, owned_by: 'google' },
             { id: 'veo-3.1', object: 'model', created: now, owned_by: 'google' },
-            { id: 'GEM_PIX_2', object: 'model', created: now, owned_by: 'flow-gateway' },
-            { id: 'NARWHAL', object: 'model', created: now, owned_by: 'flow-gateway' },
-            { id: 'IMAGEN_3_5', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'NANO_BANANA_2', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'NANO_BANANA_2_LITE', object: 'model', created: now, owned_by: 'flow-gateway' },
+            { id: 'NANO_BANANA_PRO', object: 'model', created: now, owned_by: 'flow-gateway' },
             { id: 'veo_3_1_t2v_fast_portrait', object: 'model', created: now, owned_by: 'flow-gateway' },
             { id: 'veo_3_1_r2v_fast_portrait', object: 'model', created: now, owned_by: 'flow-gateway' }
         ]
